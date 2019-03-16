@@ -15,6 +15,16 @@ export class Contacts extends React.Component<any, State> {
     };
   }
 
+  contactSelected = (selectedContact: Contact) => {
+    this.setState({
+      contacts: this.state.contacts.map(contact => {
+        return contact.id === selectedContact.id
+          ? { ...contact, isSelected: !contact.isSelected }
+          : contact;
+      })
+    });
+  };
+
   componentDidMount() {
     fetch("https://localhost:5001/api/contacts")
       .then(response => response.json())
@@ -22,6 +32,11 @@ export class Contacts extends React.Component<any, State> {
   }
 
   render() {
-    return <ContactList contacts={this.state.contacts} />;
+    return (
+      <ContactList
+        contacts={this.state.contacts}
+        selectionChanged={contact => this.contactSelected(contact)}
+      />
+    );
   }
 }
