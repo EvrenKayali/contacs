@@ -7,7 +7,7 @@ export interface Props {
 
 export function ContactList(props: Props) {
   return (
-    <table>
+    <table className="table table-bordered">
       <thead>
         <tr>
           <th>Name</th>
