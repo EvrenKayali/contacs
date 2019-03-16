@@ -1,6 +1,6 @@
 import React from "react";
-import { Contact } from "../Models/Contact";
-import { ContactList } from "./ContactList";
+import { Contact } from "./Models/Contact";
+import { ContactList } from "./Components/ContactList";
 
 export interface State {
   contacts: Contact[];

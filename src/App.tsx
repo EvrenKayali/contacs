@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Contacts } from "./Components/Contacts";
 import { Header } from "./Components/Header";
 import { Footer } from "./Components/Footer";
+import { Contacts } from "./Scenes/Contacts";
 
 import "./App.css";
 
