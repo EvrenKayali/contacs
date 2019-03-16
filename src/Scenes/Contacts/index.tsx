@@ -11,11 +11,14 @@ export class Contacts extends React.Component<any, State> {
     super(props);
 
     this.state = {
-      contacts: [
-        { name: "Evren", phoneNumber: "5326107664" },
-        { name: "Kaya", phoneNumber: "4146028" }
-      ]
+      contacts: []
     };
+  }
+
+  componentDidMount() {
+    fetch("https://localhost:5001/api/contacts")
+      .then(response => response.json())
+      .then(contacts => this.setState({ contacts }));
   }
 
   render() {

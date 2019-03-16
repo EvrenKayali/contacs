@@ -6,6 +6,7 @@ export interface Props {
 }
 
 export function ContactList(props: Props) {
+  console.log(props.contacts);
   return (
     <table className="table table-bordered">
       <thead>
@@ -14,12 +15,14 @@ export function ContactList(props: Props) {
           <th>Phone Number</th>
         </tr>
       </thead>
-      {props.contacts.map(contact => (
-        <tr>
-          <td>{contact.name}</td>
-          <td>{contact.phoneNumber}</td>
-        </tr>
-      ))}
+      <tbody>
+        {props.contacts.map(contact => (
+          <tr>
+            <td>{contact.name}</td>
+            <td>{contact.phoneNumber}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }
