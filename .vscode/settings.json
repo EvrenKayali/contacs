@@ -1,0 +1,4 @@
+{
+  "dotnet-test-explorer.testProjectPath": "server/src/Contact.Api.Tests/Contact.Api.Tests.csproj",
+  "dotnet-test-explorer.autoWatch": true
+}
