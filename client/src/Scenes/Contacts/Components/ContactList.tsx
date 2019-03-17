@@ -22,7 +22,10 @@ export function ContactList(props: Props) {
       </thead>
       <tbody>
         {props.contacts.map(contact => (
-          <tr key={contact.id}>
+          <tr
+            key={contact.id}
+            style={{ backgroundColor: contact.isSelected ? "#ccc" : "" }}
+          >
             <td>
               <input
                 type="checkbox"
