@@ -1,6 +1,13 @@
 import React from "react";
 
-export function Header() {
+export interface Props {
+  pageClick: (pageName: string) => void;
+}
+
+export function Header(props: Props) {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) =>
+    props.pageClick(e.currentTarget.innerText);
+
   return (
     <header>
       <div className="navbar navbar-dark bg-dark box-shadow">
@@ -22,6 +29,22 @@ export function Header() {
               <circle cx="12" cy="13" r="4" />
             </svg>
             <strong>Contact</strong>
+            <nav className="nav nav-masthead justify-content-center">
+              <a
+                className="nav-link active"
+                href="#"
+                onClick={e => handleLinkClick(e)}
+              >
+                Home
+              </a>
+              <a
+                className="nav-link active"
+                href="#"
+                onClick={e => handleLinkClick(e)}
+              >
+                Contacts
+              </a>
+            </nav>
           </a>
         </div>
       </div>

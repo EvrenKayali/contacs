@@ -14,7 +14,6 @@ namespace Contacts.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ContactModel>> Get(string filter = null)
         {
-            Thread.Sleep(5000);
             var contacts = new ContactModel[]
             {
                 new ContactModel { Id = 1, Name = "Erhan Cakirman", PhoneNumber = "+61540654888" },

@@ -68,7 +68,6 @@ export class Contacts extends React.Component<any, State> {
             />
           </div>
         </div>
-        {this.state.searchTerm}
       </React.Fragment>
     );
   }

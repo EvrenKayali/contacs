@@ -4,14 +4,35 @@ import { Footer } from "./Components/Footer";
 import { Contacts } from "./Scenes/Contacts";
 
 import "./App.css";
+import { Home } from "./Scenes/Home";
+import { throws } from "assert";
 
-class App extends Component {
+export interface State {
+  page: string;
+}
+
+export interface Props {}
+
+class App extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      page: "Home"
+    };
+  }
+
+  pageClick = (page: string) => {
+    this.setState({ page });
+  };
+
   render() {
     return (
       <div className="App">
-        <Header />
+        <Header pageClick={this.pageClick} />
         <main role="main" className="container">
-          <Contacts />
+          {this.state.page == "Contacts" && <Contacts />}
+          {this.state.page == "Home" && <Home />}
         </main>
         <Footer />
       </div>
