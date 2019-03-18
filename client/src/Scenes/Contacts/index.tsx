@@ -2,14 +2,6 @@ import React from "react";
 import { Contact } from "./Models/Contact";
 import { ContactList } from "./Components/ContactList";
 import ContactSearchInput from "./Components/ContactSearchInput";
-import { Subject, from, Observable, BehaviorSubject } from "rxjs";
-import {
-  debounceTime,
-  filter,
-  switchMap,
-  distinctUntilChanged,
-  first
-} from "rxjs/operators";
 
 export interface State {
   contacts: Contact[];
@@ -17,12 +9,8 @@ export interface State {
 }
 
 export class Contacts extends React.Component<any, State> {
-  searchTerm$: Subject<string>;
-
   constructor(props: any) {
     super(props);
-
-    this.searchTerm$ = new Subject();
 
     this.state = {
       contacts: [],
@@ -41,40 +29,25 @@ export class Contacts extends React.Component<any, State> {
   };
 
   handleSearchTermChange = (searchTerm: string) => {
-    this.setState({ searchTerm });
-    this.searchTerm$.next(searchTerm);
+    if (searchTerm.length >= 3 || searchTerm.length == 0) {
+      this.setState({ searchTerm });
+      this.fetchContacts(searchTerm);
+    }
   };
 
   componentDidMount() {
-    this.searchTerm$
-      .pipe(
-        debounceTime(500),
-        filter(query => query.length > 2 || query.length === 0),
-        distinctUntilChanged(),
-        switchMap(t => this.fetchContacts(t))
-      )
-      .subscribe(contacts => this.setState({ contacts }));
-
-    this.fetchContacts("")
-      .pipe(first())
-      .subscribe(contacts => this.setState({ contacts }));
+    this.fetchContacts();
   }
 
-  componentWillUnmount() {
-    if (this.searchTerm$) {
-      this.searchTerm$.unsubscribe();
-    }
-  }
-
-  fetchContacts = (searchTerm: string | undefined) => {
+  fetchContacts = (searchTerm?: string) => {
     const uri =
-      searchTerm === undefined
+      searchTerm == null
         ? "https://localhost:5001/api/contacts"
         : `https://localhost:5001/api/contacts?filter=${searchTerm}`;
 
-    const promise = fetch(uri).then(response => response.json());
-
-    return from(promise);
+    fetch(uri)
+      .then(response => response.json())
+      .then(contacts => this.setState({ contacts }));
   };
 
   render() {
@@ -95,6 +68,7 @@ export class Contacts extends React.Component<any, State> {
             />
           </div>
         </div>
+        {this.state.searchTerm}
       </React.Fragment>
     );
   }
