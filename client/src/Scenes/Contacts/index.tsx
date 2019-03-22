@@ -2,10 +2,12 @@ import React from "react";
 import { Contact } from "./Models/Contact";
 import { ContactList } from "./Components/ContactList";
 import ContactSearchInput from "./Components/ContactSearchInput";
+import { Button } from "../../Components/Button";
 
 export interface State {
   contacts: Contact[];
   searchTerm: string;
+  selectedContacts: number[];
 }
 
 export class Contacts extends React.Component<any, State> {
@@ -14,12 +16,25 @@ export class Contacts extends React.Component<any, State> {
 
     this.state = {
       contacts: [],
-      searchTerm: ""
+      searchTerm: "",
+      selectedContacts: []
     };
   }
 
-  contactSelected = (selectedContact: Contact) => {
+  toggleContactSelection = (selectedContact: Contact) => {
+    const selectedContactIndex = this.state.selectedContacts.indexOf(
+      selectedContact.id
+    );
+
+    const selectedContacts = selectedContact.isSelected
+      ? [
+          ...this.state.selectedContacts.slice(0, selectedContactIndex),
+          ...this.state.selectedContacts.slice(selectedContactIndex + 1)
+        ]
+      : [...this.state.selectedContacts, selectedContact.id];
+
     this.setState({
+      selectedContacts,
       contacts: this.state.contacts.map(contact => {
         return contact.id === selectedContact.id
           ? { ...contact, isSelected: !contact.isSelected }
@@ -47,7 +62,14 @@ export class Contacts extends React.Component<any, State> {
 
     fetch(uri)
       .then(response => response.json())
-      .then(contacts => this.setState({ contacts }));
+      .then(result => {
+        const contacts = result.map((c: Contact) => {
+          return this.state.selectedContacts.some(sc => sc == c.id)
+            ? { ...c, isSelected: true }
+            : c;
+        });
+        this.setState({ contacts, isLoading: false });
+      });
   };
 
   render() {
@@ -64,10 +86,11 @@ export class Contacts extends React.Component<any, State> {
           <div className="col">
             <ContactList
               contacts={this.state.contacts}
-              selectionChanged={contact => this.contactSelected(contact)}
+              selectionChanged={contact => this.toggleContactSelection(contact)}
             />
           </div>
         </div>
+        {this.state.selectedContacts}
       </React.Fragment>
     );
   }
