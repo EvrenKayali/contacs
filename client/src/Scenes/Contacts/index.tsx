@@ -2,10 +2,12 @@ import React from "react";
 import { Contact } from "./Models/Contact";
 import { ContactList } from "./Components/ContactList";
 import ContactSearchInput from "./Components/ContactSearchInput";
+import { Spinner } from "../../Components/Spinner";
 
 export interface State {
   contacts: Contact[];
   searchTerm: string;
+  isLoading: boolean;
   selectedContacts: number[];
 }
 
@@ -16,6 +18,7 @@ export class Contacts extends React.Component<any, State> {
     this.state = {
       contacts: [],
       searchTerm: "",
+      isLoading: false,
       selectedContacts: []
     };
   }
@@ -54,6 +57,7 @@ export class Contacts extends React.Component<any, State> {
   }
 
   fetchContacts = (searchTerm?: string) => {
+    this.setState({ isLoading: true });
     const uri =
       searchTerm == null
         ? "https://localhost:5001/api/contacts"
@@ -87,6 +91,7 @@ export class Contacts extends React.Component<any, State> {
               contacts={this.state.contacts}
               selectionChanged={contact => this.toggleContactSelection(contact)}
             />
+            <Spinner isVisible={this.state.isLoading} />
           </div>
         </div>
         {this.state.selectedContacts}

@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Header } from "./Components/Header";
 import { Footer } from "./Components/Footer";
 import { Contacts } from "./Scenes/Contacts";
+import { Home } from "./Scenes/Home";
 
 import "./App.css";
-import { Home } from "./Scenes/Home";
-import { throws } from "assert";
+import spinner from "./spinner.svg";
 
 export interface State {
   page: string;
