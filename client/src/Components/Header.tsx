@@ -29,23 +29,23 @@ export function Header(props: Props) {
               <circle cx="12" cy="13" r="4" />
             </svg>
             <strong>Contact</strong>
-            <nav className="nav nav-masthead justify-content-center">
-              <a
-                className="nav-link active"
-                href="#"
-                onClick={e => handleLinkClick(e)}
-              >
-                Home
-              </a>
-              <a
-                className="nav-link active"
-                href="#"
-                onClick={e => handleLinkClick(e)}
-              >
-                Contacts
-              </a>
-            </nav>
           </a>
+          <nav className="nav nav-masthead justify-content-center">
+            <a
+              className="nav-link active"
+              href="#"
+              onClick={e => handleLinkClick(e)}
+            >
+              Home
+            </a>
+            <a
+              className="nav-link active"
+              href="#"
+              onClick={e => handleLinkClick(e)}
+            >
+              Contacts
+            </a>
+          </nav>
         </div>
       </div>
     </header>
