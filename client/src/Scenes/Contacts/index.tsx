@@ -2,7 +2,6 @@ import React from "react";
 import { Contact } from "./Models/Contact";
 import { ContactList } from "./Components/ContactList";
 import ContactSearchInput from "./Components/ContactSearchInput";
-import { Button } from "../../Components/Button";
 
 export interface State {
   contacts: Contact[];
@@ -68,7 +67,7 @@ export class Contacts extends React.Component<any, State> {
             ? { ...c, isSelected: true }
             : c;
         });
-        this.setState({ contacts, isLoading: false });
+        this.setState({ contacts });
       });
   };
 
