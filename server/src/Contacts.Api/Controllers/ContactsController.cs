@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Contacts.Api.Models;
@@ -25,7 +26,7 @@ namespace Contacts.Api.Controllers
 
             var result = filter == null
             ? contacts
-            : contacts.Where(c => c.Name.StartsWith(filter));
+            : contacts.Where(c => c.Name.StartsWith(filter, true, CultureInfo.CurrentCulture));
 
             return Ok(result);
         }
