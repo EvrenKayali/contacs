@@ -1,100 +1,53 @@
 import React from "react";
 import { Contact } from "./Models/Contact";
 import { ContactList } from "./Components/ContactList";
-import ContactSearchInput from "./Components/ContactSearchInput";
-import { Spinner } from "../../Components/Spinner";
+import { ContactsState } from "../../Store/Types";
+import { AppState } from "../../Store";
+import { connect } from "react-redux";
+import { changeSelection } from "../../Store/Actions";
+import { fetchContacts } from "./Services";
+import { throws } from "assert";
 
-export interface State {
-  contacts: Contact[];
-  searchTerm: string;
-  isLoading: boolean;
-  selectedContacts: number[];
+export interface Props {
+  contactState: ContactsState;
+  changeSelection: typeof changeSelection;
+  fetchContacts: any;
 }
 
-export class Contacts extends React.Component<any, State> {
-  constructor(props: any) {
-    super(props);
-
-    this.state = {
-      contacts: [],
-      searchTerm: "",
-      isLoading: false,
-      selectedContacts: []
-    };
-  }
-
+export class Contacts extends React.Component<Props> {
   toggleContactSelection = (selectedContact: Contact) => {
-    const selectedContactIndex = this.state.selectedContacts.indexOf(
-      selectedContact.id
-    );
-
-    const selectedContacts = selectedContact.isSelected
-      ? [
-          ...this.state.selectedContacts.slice(0, selectedContactIndex),
-          ...this.state.selectedContacts.slice(selectedContactIndex + 1)
-        ]
-      : [...this.state.selectedContacts, selectedContact.id];
-
-    this.setState({
-      selectedContacts,
-      contacts: this.state.contacts.map(contact => {
-        return contact.id === selectedContact.id
-          ? { ...contact, isSelected: !contact.isSelected }
-          : contact;
-      })
-    });
-  };
-
-  handleSearchTermChange = (searchTerm: string) => {
-    if (searchTerm.length >= 3 || searchTerm.length == 0) {
-      this.setState({ searchTerm });
-      this.fetchContacts(searchTerm);
-    }
+    this.props.changeSelection(selectedContact);
   };
 
   componentDidMount() {
-    this.fetchContacts();
+    this.props.fetchContacts();
   }
-
-  fetchContacts = (searchTerm?: string) => {
-    this.setState({ isLoading: true });
-    const uri =
-      searchTerm == null
-        ? "https://localhost:5001/api/contacts"
-        : `https://localhost:5001/api/contacts?filter=${searchTerm}`;
-
-    fetch(uri)
-      .then(response => response.json())
-      .then(result => {
-        const contacts = result.map((c: Contact) => {
-          return this.state.selectedContacts.some(sc => sc == c.id)
-            ? { ...c, isSelected: true }
-            : c;
-        });
-        this.setState({ contacts, isLoading: false });
-      });
-  };
 
   render() {
     return (
       <React.Fragment>
         <div className="row mt-3">
-          <div className="col">
-            <ContactSearchInput
-              onSearch={term => this.handleSearchTermChange(term)}
-            />
-          </div>
+          <div className="col" />
         </div>
         <div className="row mt-3">
           <div className="col">
             <ContactList
-              contacts={this.state.contacts}
-              selectionChanged={contact => this.toggleContactSelection(contact)}
+              contacts={this.props.contactState.contacts}
+              selectionChanged={e => this.toggleContactSelection(e)}
             />
-            <Spinner isVisible={this.state.isLoading} />
           </div>
         </div>
+        {JSON.stringify(this.props.contactState.contact)}
       </React.Fragment>
     );
   }
 }
+
+const mapStateToProps = (state: AppState) => ({
+  contactState: state.contact
+});
+
+export default connect(
+  mapStateToProps,
+  { changeSelection, fetchContacts }
+)(Contacts);
