@@ -71,7 +71,7 @@ export class Contacts extends React.Component<any, State> {
             ? { ...c, isSelected: true }
             : c;
         });
-        this.setState({ contacts });
+        this.setState({ contacts, isLoading: false });
       });
   };
 
@@ -94,7 +94,6 @@ export class Contacts extends React.Component<any, State> {
             <Spinner isVisible={this.state.isLoading} />
           </div>
         </div>
-        {this.state.selectedContacts}
       </React.Fragment>
     );
   }
